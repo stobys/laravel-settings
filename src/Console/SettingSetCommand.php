@@ -44,7 +44,7 @@ class SettingSetCommand extends Command
         $headers = ['Key', 'Value', 'User ID'];
         $data = [
             'key'       => $this->argument('key'),
-            'value'     => settings()->setUser()->get($this->argument('key')),
+            'value'     => settings()->setUser($this->argument('user'))->get($this->argument('key')),
             'user_id'   => $this->argument('user'),
         ];
 
