@@ -12,7 +12,8 @@ class SettingGetCommand extends Command
      * @var string
      */
     protected $signature = 'setting:get
-                            {key : Setting key}';
+                            {key : Setting key}
+                            {user? : User ID or username}';
 
     /**
      * The console command description.
@@ -38,12 +39,6 @@ class SettingGetCommand extends Command
      */
     public function handle()
     {
-        $raw = app('setting')->getRaw($this->argument('key'));
-        $info = $raw->value;
-        if ($raw->whereIn('type', ['array', 'json', 'object', 'collection'])) {
-            $info = json_encode($info);
-        }
-
-        $this->info($info);
+        $this->info( $this->argument('key') .' = '. settings($this->argument('key')) );
     }
 }

@@ -41,7 +41,7 @@ class SettingSetCommand extends Command
      */
     public function handle()
     {
-        app('setting')->set($this->argument('key'), $this->argument('value'));
-        $this->info('Setting added. Succ.');
+        settings() -> set($this->argument('key'), $this->argument('value'));
+        $this -> info('Setting added. Succ.');
     }
 }
