@@ -1,0 +1,31 @@
+{
+    "name": "stobys/laravel-settings",
+    "description": "Laravel Settings",
+    "keywords": [
+        "laravel",
+        "settings",
+    ],
+    "homepage": "https://github.com/stobys/laravel-sortable",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sławomir Tobys",
+            "email": "s.tobys@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.2",
+        "illuminate/database": "*",
+    },
+    "require-dev": {
+        "phpunit/phpunit": "4.6.*"
+    },
+    "autoload": {
+        "files": [
+            "src/helpers.php"
+        ],
+        "psr-4": {
+            "SylveK\\LaravelSettings\\": "src/"
+        }
+    }
+}
