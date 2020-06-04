@@ -4,7 +4,7 @@ Laravel Settings (Database + Cache) - basically copy of https://github.com/efria
 
 
 ## How to Install
-Require this package with composer ([Packagist](https://packagist.org/packages/efriandika/laravel-settings)) using the following command:
+Require this package with composer ([Packagist](https://packagist.org/packages/stobys/laravel-settings)) using the following command:
 
     composer require stobys/laravel-settings
 
