@@ -3,7 +3,7 @@
     "description": "Laravel Settings",
     "keywords": [
         "laravel",
-        "settings",
+        "settings"
     ],
     "homepage": "https://github.com/stobys/laravel-sortable",
     "license": "MIT",
@@ -15,7 +15,7 @@
     ],
     "require": {
         "php": ">=7.2",
-        "illuminate/database": "*",
+        "illuminate/database": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "4.6.*"
