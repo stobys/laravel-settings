@@ -156,7 +156,7 @@ class Settings
         if (is_null($setting)) {
             $this -> database -> table($this->config['db_table'])
                         -> insert([
-                            'user_id' => $this -> user_id
+                            'user_id' => $this -> user_id,
                             'key' => $key,
                             'value' => $value,
                         ]);
