@@ -39,6 +39,14 @@ class SettingGetCommand extends Command
      */
     public function handle()
     {
-        $this->info( $this->argument('key') .' = '. settings()->setUser($this->argument('user'))->get($this->argument('key')) );
+        $headers = ['Key', 'Value', 'User ID'];
+        $data = [
+            $this->argument('key'),
+            settings()->setUser()->get($this->argument('key'))
+            $this->argument('user'),
+        ];
+
+        $this->table($headers, $data);
     }
+
 }
