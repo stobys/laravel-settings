@@ -42,13 +42,13 @@ class Settings
         {
             $this -> user_id = $user;
         }
-        else (
+        else {
             $user = \App\Models\User::whereUsername($user) -> first();
             if ( $user )
             {
                 $this -> user_id = $this -> id;
             }
-        )
+        }
 
         return $this;
     }
