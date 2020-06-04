@@ -4,6 +4,9 @@ namespace SylveK\LaravelSettings;
 
 use Illuminate\Support\ServiceProvider;
 
+use SylveK\LaravelSettings\Console\SettingGetCommand;
+use SylveK\LaravelSettings\Console\SettingSetCommand;
+
 class SettingsServiceProvider extends ServiceProvider
 {
     // -- Indicates if loading of the provider is deferred.
@@ -19,12 +22,12 @@ class SettingsServiceProvider extends ServiceProvider
             __DIR__ . '/database/migrations/' => base_path('/database/migrations')
         ]);
 
-        // if ($this->app->runningInConsole()) {
+        if ($this->app->runningInConsole()) {
             $this->commands([
-                Console\SettingGetCommand::class,
-                Console\SettingSetCommand::class,
+                SettingGetCommand::class,
+                SettingSetCommand::class,
             ]);
-        // }
+        }
     }
 
     // -- Register the service provider.
