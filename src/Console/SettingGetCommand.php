@@ -42,7 +42,7 @@ class SettingGetCommand extends Command
         $headers = ['Key', 'Value', 'User ID'];
         $data = [
             $this->argument('key'),
-            settings()->setUser()->get($this->argument('key'))
+            settings()->setUser()->get($this->argument('key')),
             $this->argument('user'),
         ];
 
