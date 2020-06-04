@@ -27,5 +27,12 @@
         "psr-4": {
             "SylveK\\LaravelSettings\\": "src/"
         }
-    }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "SylveK\\LaravelSettings\\SettingsServiceProvider"
+            ]
+        }
+    },
 }
