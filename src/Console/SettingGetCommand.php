@@ -46,7 +46,7 @@ class SettingGetCommand extends Command
             $this -> argument('user'),
         ];
 
-        $this -> table($headers, $data);
+        $this -> table($headers, [$data]);
     }
 
 }

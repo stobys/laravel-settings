@@ -14,8 +14,7 @@ class SettingSetCommand extends Command
     protected $signature = 'setting:set
                             {key : Setting key}
                             {value : Setting value}
-                            {user? : User ID or username, null for global setting}
-                            ';
+                            {user? : User ID or username, null for global setting}';
 
     /**
      * The console command description.
@@ -44,13 +43,12 @@ class SettingSetCommand extends Command
         $headers = ['Key', 'Value', 'User ID'];
         $data = [
             'key'       => $this->argument('key'),
-            'value'     => settings()->setUser($this->argument('user'))->get($this->argument('key')),
+            'value'     => $this->argument('value'),
             'user_id'   => $this->argument('user'),
         ];
 
         settings() -> setUser($data['user_id']) -> set($data['key'], $data['value']);
 
-        $this -> table($headers, $data);
-
+        $this -> table($headers, [$data]);
     }
 }
