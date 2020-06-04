@@ -34,14 +34,13 @@ class Settings
 
     public function setUser( $user )
     {
-
         if ( $user instanceof \App\Models\User )
         {
-            $this -> user = $user -> id;
+            $this -> user_id = $user -> id;
         }
         elseif ( is_int($user) )
         {
-            $this -> user = $user;
+            $this -> user_id = $user;
         }
         else (
             $user = \App\Models\User::whereUsername($user) -> first();
@@ -56,10 +55,14 @@ class Settings
 
     public function unsetUser()
     {
-
         $this -> user_id = null;
 
         return $this;
+    }
+
+    public function whichUser()
+    {
+        return $this -> user_id;
     }
 
     /**
