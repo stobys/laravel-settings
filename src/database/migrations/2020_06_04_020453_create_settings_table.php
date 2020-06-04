@@ -12,7 +12,7 @@ class CreateSettingsTable extends Migration {
 	 */
 	public function up()
 	{
-        $tableName = config('settings.table_names');
+        $tableName = config('settings.db_table');
 
         if (empty($tableName)) {
             throw new \Exception('Error: config/laravel-settings.php not found and defaults could not be merged. Please publish the package configuration before proceeding.');
@@ -41,12 +41,12 @@ class CreateSettingsTable extends Migration {
 	 */
 	public function down()
 	{
-		$tableName = config('settings.table_names');
+		$tableName = config('settings.db_table');
 
         if (empty($tableName)) {
 			throw new \Exception('Error: config/laravel-settings.php not found and defaults could not be merged. Please publish the package configuration before proceeding, or drop the table manually.');
         }
-		
+
 		Schema::drop($tableName);
 	}
 
