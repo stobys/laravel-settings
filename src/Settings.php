@@ -21,12 +21,45 @@ class Settings
     // -- Cache
     protected $cache;
 
+    // -- User ID
+    protected $user_id;
+
     // -- Constructor
     public function __construct(DatabaseManager $database, Cache $cache, $config = array ())
     {
         $this -> database = $database;
         $this -> config   = $config;
         $this -> cache    = $cache;
+    }
+
+    public function setUser( $user )
+    {
+
+        if ( $user instanceof \App\Models\User )
+        {
+            $this -> user = $user -> id;
+        }
+        elseif ( is_int($user) )
+        {
+            $this -> user = $user;
+        }
+        else (
+            $user = \App\Models\User::whereUsername($user) -> first();
+            if ( $user )
+            {
+                $this -> user_id = $this -> id;
+            }
+        )
+
+        return $this;
+    }
+
+    public function unsetUser()
+    {
+
+        $this -> user_id = null;
+
+        return $this;
     }
 
     /**
@@ -70,7 +103,10 @@ class Settings
             return $this -> cache -> get($key);
         }
 
-        $row = $this -> database -> table($this -> config['db_table']) -> where('key', $key) -> first(['value']);
+        $row = $this -> database -> table($this -> config['db_table'])
+                        -> where('user_id', $this -> user_id)
+                        -> where('key', $key)
+                        -> first(['value']);
 
         return (!is_null($row)) ? $this -> cache -> set($key, unserialize($row -> value)) : null;
     }
@@ -88,9 +124,13 @@ class Settings
         if ($this->cache->hasKey($key)) {
             return true;
         }
-        $row = $this -> database -> table($this -> config['db_table']) -> where('key', $key) -> first(['value']);
 
-        return (count($row) > 0);
+        $count = $this -> database -> table($this -> config['db_table'])
+                        -> where('user_id', $this -> user_id)
+                        -> where('key', $key)
+                        -> count(['value']);
+
+        return $count > 0;
     }
 
     /**
@@ -105,13 +145,22 @@ class Settings
     {
         $value = serialize($value);
 
-        $setting = $this -> database -> table($this -> config['db_table']) -> where('key', $key) -> first();
+        $setting = $this -> database -> table($this -> config['db_table'])
+                        -> where('user_id', $this -> user_id)
+                        -> where('key', $key)
+                        -> first();
 
         if (is_null($setting)) {
             $this -> database -> table($this->config['db_table'])
-                           -> insert(['key' => $key, 'value' => $value]);
-        } else {
+                        -> insert([
+                            'user_id' => $this -> user_id
+                            'key' => $key,
+                            'value' => $value,
+                        ]);
+        }
+        else {
             $this -> database -> table($this->config['db_table'])
+                           -> where('user_id', $this -> user_id)
                            -> where('key', $key)
                            -> update(['value' => $value]);
         }
@@ -131,7 +180,11 @@ class Settings
      */
     public function forget($key)
     {
-        $this -> database -> table($this -> config['db_table']) -> where('key', $key) -> delete();
+        $this -> database -> table($this -> config['db_table'])
+                -> where('user_id', $this -> user_id)
+                -> where('key', $key)
+                -> delete();
+
         $this -> cache -> forget($key);
     }
 
