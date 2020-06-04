@@ -39,6 +39,6 @@ class SettingGetCommand extends Command
      */
     public function handle()
     {
-        $this->info( $this->argument('key') .' = '. settings($this->argument('key')) );
+        $this->info( $this->argument('key') .' = '. settings()->setUser($this->argument('user'))->get($this->argument('key')) );
     }
 }
