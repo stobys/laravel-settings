@@ -107,7 +107,15 @@ class Settings
         }
 
         $row = $this -> database -> table($this -> config['db_table'])
-                        -> where('user_id', $this -> user_id)
+                        -> where( function($query) use ($user_id) {
+                                if ( $user_id )
+                                {
+                                    $query -> where('user_id', $user_id);
+                                }
+                                else {
+                                    $query -> whereNull('user_id');
+                                }
+                            })
                         -> where('key', $key)
                         -> first(['value']);
 
@@ -129,7 +137,15 @@ class Settings
         }
 
         $count = $this -> database -> table($this -> config['db_table'])
-                        -> where('user_id', $this -> user_id)
+                        -> where( function($query) use ($user_id) {
+                                if ( $user_id )
+                                {
+                                    $query -> where('user_id', $user_id);
+                                }
+                                else {
+                                    $query -> whereNull('user_id');
+                                }
+                            })
                         -> where('key', $key)
                         -> count(['value']);
 
@@ -147,9 +163,18 @@ class Settings
     public function set($key, $value)
     {
         $value = serialize($value);
+        $user_id = $this -> user_id;
 
         $setting = $this -> database -> table($this -> config['db_table'])
-                        -> where('user_id', $this -> user_id)
+                        -> where( function($query) use ($user_id) {
+                                if ( $user_id )
+                                {
+                                    $query -> where('user_id', $user_id);
+                                }
+                                else {
+                                    $query -> whereNull('user_id');
+                                }
+                            })
                         -> where('key', $key)
                         -> first();
 
@@ -163,7 +188,15 @@ class Settings
         }
         else {
             $this -> database -> table($this->config['db_table'])
-                           -> where('user_id', $this -> user_id)
+                            -> where( function($query) use ($user_id) {
+                                    if ( $user_id )
+                                    {
+                                        $query -> where('user_id', $user_id);
+                                    }
+                                    else {
+                                        $query -> whereNull('user_id');
+                                    }
+                                })
                            -> where('key', $key)
                            -> update(['value' => $value]);
         }
@@ -184,7 +217,15 @@ class Settings
     public function forget($key)
     {
         $this -> database -> table($this -> config['db_table'])
-                -> where('user_id', $this -> user_id)
+                -> where( function($query) use ($user_id) {
+                        if ( $user_id )
+                        {
+                            $query -> where('user_id', $user_id);
+                        }
+                        else {
+                            $query -> whereNull('user_id');
+                        }
+                    })
                 -> where('key', $key)
                 -> delete();
 
