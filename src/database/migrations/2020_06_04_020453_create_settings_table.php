@@ -15,7 +15,7 @@ class CreateSettingsTable extends Migration {
         $tableName = config('settings.db_table');
 
         if (empty($tableName)) {
-            throw new \Exception('Error: config/laravel-settings.php not found and defaults could not be merged. Please publish the package configuration before proceeding.');
+            throw new \Exception('Error: config/settings.php not found and defaults could not be merged. Please publish the package configuration before proceeding.');
         }
 
 		Schema::create($tableName, function(Blueprint $table)
@@ -47,7 +47,7 @@ class CreateSettingsTable extends Migration {
 		$tableName = config('settings.db_table');
 
         if (empty($tableName)) {
-			throw new \Exception('Error: config/laravel-settings.php not found and defaults could not be merged. Please publish the package configuration before proceeding, or drop the table manually.');
+			throw new \Exception('Error: config/settings.php not found and defaults could not be merged. Please publish the package configuration before proceeding, or drop the table manually.');
         }
 
 		Schema::drop($tableName);

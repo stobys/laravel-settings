@@ -65,14 +65,7 @@ class Settings
         return $this -> user_id;
     }
 
-    /**
-     * Value getter
-     *
-     * @param  string $key
-     * @param  string $default
-     *
-     * @return mixed
-     */
+    // -- Value getter
     public function get($key, $default = null)
     {
         $value = $this -> fetch($key);
@@ -95,15 +88,13 @@ class Settings
         }
     }
 
-    /**
-     * @param $key
-     *
-     * @return mixed|null
-     */
+    // -- Get the setting value
     private function fetch($key)
     {
-        if ($this -> cache -> hasKey($key)) {
-            return $this -> cache -> get($key);
+        $user_id = $this -> user_id;
+
+        if ($this -> cache -> has($key, $user_id)) {
+            return $this -> cache -> get($key, $user_id);
         }
 
         $row = $this -> database -> table($this -> config['db_table'])
@@ -119,20 +110,16 @@ class Settings
                         -> where('key', $key)
                         -> first(['value']);
 
-        return (!is_null($row)) ? $this -> cache -> set($key, unserialize($row -> value)) : null;
+        return (!is_null($row)) ? $this -> cache -> set($key, unserialize($row -> value), $user_id) : null;
     }
 
 
-    /**
-     * Checks if setting exists
-     *
-     * @param $key
-     *
-     * @return bool
-     */
+    // -- Checks if setting exists
     public function hasKey($key)
     {
-        if ($this->cache->hasKey($key)) {
+        $user_id = $this -> user_id;
+
+        if ($this -> cache -> has($key, $user_id)) {
             return true;
         }
 
@@ -152,14 +139,7 @@ class Settings
         return $count > 0;
     }
 
-    /**
-     * Store value into registry
-     *
-     * @param  string $key
-     * @param  mixed  $value
-     *
-     * @return mixed
-     */
+    // -- Store value into registry
     public function set($key, $value)
     {
         $value = serialize($value);
@@ -201,21 +181,17 @@ class Settings
                            -> update(['value' => $value]);
         }
 
-        $this -> cache -> set($key, unserialize($value));
+        $this -> cache -> set($key, unserialize($value), $user_id);
 
         return $value;
     }
 
 
-    /**
-     * Remove a setting
-     *
-     * @param  string $key
-     *
-     * @return void
-     */
+    // -- Remove a setting
     public function forget($key)
     {
+        $user_id = $this -> user_id;
+
         $this -> database -> table($this -> config['db_table'])
                 -> where( function($query) use ($user_id) {
                         if ( $user_id )
@@ -229,14 +205,10 @@ class Settings
                 -> where('key', $key)
                 -> delete();
 
-        $this -> cache -> forget($key);
+        $this -> cache -> forget($key, $user_id);
     }
 
-    /**
-     * Remove all settings
-     *
-     * @return bool
-     */
+    // -- Remove all settings
     public function flush()
     {
         $this -> cache -> flush();
@@ -244,11 +216,7 @@ class Settings
         return $this -> database -> table($this -> config['db_table']) -> delete();
     }
 
-    /**
-     * Fetch all values
-     *
-     * @return mixed
-     */
+    // -- Fetch all values
     public function getAll()
     {
         return $this -> cache -> getAll();

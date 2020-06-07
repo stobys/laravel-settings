@@ -4,25 +4,17 @@ namespace SylveK\LaravelSettings;
 
 /**
  * Class Cache
- * @package Efriandika\LaravelSettings
+ *
+ * @package SylveK\LaravelSettings
  */
 class Cache
 {
 
-    /**
-     * Path to cache file
-     *
-     * @var string
-     */
+    // -- Path to cache file
     protected $cacheFile;
 
-    /**
-     * Cached Settings
-     *
-     * @var array
-     */
+    // -- Cached Settings array
     protected $settings;
-
 
     /**
      * Constructor
@@ -34,7 +26,7 @@ class Cache
         $this -> cacheFile = $cacheFile;
         $this -> checkCacheFile();
 
-        $this -> settings = $this->getAll();
+        $this -> settings = $this -> getAll();
     }
 
     /**
@@ -45,9 +37,9 @@ class Cache
      *
      * @return mixed
      */
-    public function set($key, $value)
+    public function set($key, $value, $user_id = 0)
     {
-        $this -> settings[$key] = $value;
+        $this -> settings[$user_id][$key] = $value;
         $this -> store();
 
         return $value;
@@ -61,84 +53,70 @@ class Cache
      *
      * @return mixed
      */
-    public function get($key, $default = null)
+    public function get($key, $default = null, $user_id = 0)
     {
-        return (array_key_exists($key, $this -> settings) ? $this -> settings[$key] : $default);
+        return (array_key_exists($key, $this -> settings[$user_id])
+                    ? $this -> settings[$user_id][$key]
+                    : $default);
     }
 
-    /**
-     * Checks if $key is cached
-     *
-     * @param $key
-     *
-     * @return bool
-     */
-    public function hasKey($key)
+    // -- Checks if $key is cached
+    public function has($key, $user_id)
     {
-        return array_key_exists($key, $this -> settings);
+        return array_key_exists($key, $this -> settings[$user_id]);
     }
 
-    /**
-     * Gets all cached settings
-     *
-     * @return array
-     */
+    // -- Gets all cached settings
     public function getAll()
     {
-        $values = json_decode(file_get_contents($this -> cacheFile), true);
-        foreach ($values as $key => $value) {
-            $values[$key] = unserialize($value);
+        $settings = json_decode(file_get_contents($this -> cacheFile), true);
+        $results = [];
+
+        foreach ($settings as $user_id => $values) {
+            foreach ($values as $key => $value) {
+                $results[$user_id][$key] = unserialize($value);
+            }
         }
-        return $values;
+
+        return $results;
     }
 
-    /**
-     * Stores all settings to the cache file
-     *
-     * @return void
-     */
+    // -- Stores all settings to the cache file
     private function store()
     {
         $settings = [];
-        foreach ($this -> settings as $key => $value) {
-            $settings[$key] = serialize($value);
+
+        foreach ($this -> settings as $user_id => $settings) {
+            foreach ($settings as $key => $value) {
+                $settings[$user_id][$key] = serialize($value);
+            }
         }
+
         file_put_contents($this -> cacheFile, json_encode($settings));
     }
 
-    /**
-     * Removes a value
-     *
-     * @return void
-     */
-    public function forget($key)
+    // -- Removes a value
+    public function forget($key, $user_id = 0)
     {
-        if (array_key_exists($key, $this -> settings)) {
-            unset($this -> settings[$key]);
+        if (array_key_exists($key, $this -> settings[$user_id])) {
+            unset($this -> settings[$user_id][$key]);
         }
+
         $this -> store();
     }
 
-    /**
-     * Removes all values
-     *
-     * @return void
-     */
+    // -- Removes all values
     public function flush()
     {
         file_put_contents($this -> cacheFile, json_encode([]));
-        // fixed the set after immediately the flush, should be returned empty
-        $this->settings = [];
+
+        $this -> settings = [];
     }
 
-    /**
-     * Checks if the cache file exists and creates it if not
-     *
-     * @return void
-     */
+    // -- Checks if the cache file exists and creates it if not
     private function checkCacheFile()
     {
-        if (!file_exists($this -> cacheFile)) {
+        if ( ! file_exists($this -> cacheFile) ) {
             $this -> flush();
         }
     }
