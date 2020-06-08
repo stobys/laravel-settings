@@ -16,11 +16,7 @@ class Cache
     // -- Cached Settings array
     protected $settings;
 
-    /**
-     * Constructor
-     *
-     * @param string $cacheFile
-     */
+    // -- Constructor
     public function __construct($cacheFile)
     {
         $this -> cacheFile = $cacheFile;
@@ -29,32 +25,29 @@ class Cache
         $this -> settings = $this -> getAll();
     }
 
-    /**
-     * Sets a value
-     *
-     * @param $key
-     * @param $value
-     *
-     * @return mixed
-     */
+    // -- Sets a value
     public function set($key, $value, $user_id = 0)
     {
+        $user_id = empty($user_id) ? 0 : $user_id;
+
+        if (array_key_exists($user_id), $this -> settings) {
+            $this -> settings[$user_id] = [];
+        }
+
         $this -> settings[$user_id][$key] = $value;
         $this -> store();
 
         return $value;
     }
 
-    /**
-     * Gets a value
-     *
-     * @param      $key
-     * @param null $default
-     *
-     * @return mixed
-     */
+    // -- Gets a value
     public function get($key, $default = null, $user_id = 0)
     {
+        if ( ! array_key_exists($user_id, $this -> settings) )
+        {
+            return $default;
+        }
+
         return (array_key_exists($key, $this -> settings[$user_id])
                     ? $this -> settings[$user_id][$key]
                     : $default);
