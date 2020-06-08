@@ -56,7 +56,7 @@ class Cache
 
         foreach ($settings as $user_id => $values) {
             foreach ($values as $key => $value) {
-                $results[$user_id][$key] = unserialize($value);
+                array_set($results, $user_id .'.'. $key, unserialize($value));
             }
         }
 

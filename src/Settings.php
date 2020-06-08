@@ -94,7 +94,7 @@ class Settings
         $user_id = $this -> user_id;
 
         if ($this -> cache -> has($key, $user_id)) {
-            return $this -> cache -> get($key, $user_id);
+            return $this -> cache -> get($key, null, $user_id);
         }
 
         $row = $this -> database -> table($this -> config['db_table'])
@@ -115,7 +115,7 @@ class Settings
 
 
     // -- Checks if setting exists
-    public function hasKey($key)
+    public function has($key)
     {
         $user_id = $this -> user_id;
 
