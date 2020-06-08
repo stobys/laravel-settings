@@ -30,7 +30,7 @@ class Cache
     {
         $user_id = empty($user_id) ? 0 : $user_id;
 
-        if (array_key_exists($user_id), $this -> settings) {
+        if ( ! array_key_exists($user_id, $this -> settings) ) {
             $this -> settings[$user_id] = [];
         }
 
