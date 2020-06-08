@@ -216,10 +216,20 @@ class Settings
         return $this -> database -> table($this -> config['db_table']) -> delete();
     }
 
+    // -- Get Cache object
+    public function cache()
+    {
+        return $this -> cache;
+    }
+
     // -- Fetch all values
     public function getAll()
     {
         return $this -> cache -> getAll();
     }
 
+
+    private function reloadCache() {
+        // -- @TODO : reload cache file from DB
+    }
 }

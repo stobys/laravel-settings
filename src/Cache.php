@@ -29,12 +29,8 @@ class Cache
     public function set($key, $value, $user_id = 0)
     {
         $user_id = empty($user_id) ? 0 : $user_id;
+        array_set($this -> settings, $user_id .'.'. $key, $value);
 
-        if ( ! array_key_exists($user_id, $this -> settings) ) {
-            $this -> settings[$user_id] = [];
-        }
-
-        $this -> settings[$user_id][$key] = $value;
         $this -> store();
 
         return $value;
@@ -43,20 +39,13 @@ class Cache
     // -- Gets a value
     public function get($key, $default = null, $user_id = 0)
     {
-        if ( ! array_key_exists($user_id, $this -> settings) )
-        {
-            return $default;
-        }
-
-        return (array_key_exists($key, $this -> settings[$user_id])
-                    ? $this -> settings[$user_id][$key]
-                    : $default);
+        return array_get($this -> settings, $user_id .'.'. $key, $default);
     }
 
     // -- Checks if $key is cached
     public function has($key, $user_id)
     {
-        return array_key_exists($key, $this -> settings[$user_id]);
+        return array_has($this -> settings, $user_id .'.'. $key);
     }
 
     // -- Gets all cached settings
@@ -91,9 +80,7 @@ class Cache
     // -- Removes a value
     public function forget($key, $user_id = 0)
     {
-        if (array_key_exists($key, $this -> settings[$user_id])) {
-            unset($this -> settings[$user_id][$key]);
-        }
+        array_forget($this -> settings, $user_id .'.'. $key);
 
         $this -> store();
     }
@@ -113,4 +100,5 @@ class Cache
             $this -> flush();
         }
     }
+
 }
