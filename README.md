@@ -1,6 +1,6 @@
 
 # Laravel-Settings
-Laravel Settings (Database + Cache) - basically copy of https://github.com/efriandika/laravel-settings
+Laravel Settings (Database + Cache) - basically clone of https://github.com/efriandika/laravel-settings
 
 
 ## How to Install

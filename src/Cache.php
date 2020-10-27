@@ -49,7 +49,7 @@ class Cache
     }
 
     // -- Gets all cached settings
-    public function getAll()
+    public function all()
     {
         $settings = json_decode(file_get_contents($this -> cacheFile), true);
         $results = [];
@@ -70,7 +70,7 @@ class Cache
 
         foreach ($this -> settings as $user_id => $settings) {
             foreach ($settings as $key => $value) {
-                $settings[$user_id][$key] = serialize($value);
+                array_set($settings, $user_id .'.'. $key, unserialize($value));
             }
         }
 

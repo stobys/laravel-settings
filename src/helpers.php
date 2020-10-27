@@ -7,7 +7,7 @@ if (!function_exists('settings'))
     /**
      * @param string|null $key
      * @param null $default
-     * @return mixed|\Efriandika\LaravelSettings\Facades\Settings
+     * @return mixed|\SylveK\LaravelSettings\Facades\Settings
      */
     function settings($key = null, $default = null)
     {

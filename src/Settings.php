@@ -74,11 +74,11 @@ class Settings
         {
             return $value;
         }
-        else if($default != null)
+        elseif( ! is_null($default) )
         {
             return $default;
         }
-        else if($this -> config['fallback'])
+        elseif( $this -> config['fallback'] )
         {
             return Config::get($key, null);
         }
@@ -223,9 +223,9 @@ class Settings
     }
 
     // -- Fetch all values
-    public function getAll()
+    public function all()
     {
-        return $this -> cache -> getAll();
+        return $this -> cache -> all();
     }
 
 
