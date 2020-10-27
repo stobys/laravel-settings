@@ -63,6 +63,12 @@ class Cache
         return $results;
     }
 
+    // -- Alias for all() method
+    public function getAll()
+    {
+        return $this -> all();
+    }
+
     // -- Stores all settings to the cache file
     private function store()
     {
