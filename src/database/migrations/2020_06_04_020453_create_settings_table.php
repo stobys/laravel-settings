@@ -21,9 +21,9 @@ class CreateSettingsTable extends Migration {
 		Schema::create($tableName, function(Blueprint $table)
 		{
             $table -> bigIncrements('id');
-            $table -> bigInteger('user_id') -> nullable() -> index();
+            $table -> bigInteger('user_id') -> nullable();
 
-            $table -> string('key', 100) -> index();
+            $table -> string('key', 100);
             $table -> text('value') -> nullable();
             $table -> text('description') -> nullable();
 
@@ -31,7 +31,7 @@ class CreateSettingsTable extends Migration {
             $table -> dateTime('updated_at') -> nullable() -> useCurrent();
             $table -> dateTime('deleted_at') -> nullable();
 
-			$table -> unique(['key', 'user_id']);
+			$table -> unique(['user_id', 'key']);
 
 		});
 	}

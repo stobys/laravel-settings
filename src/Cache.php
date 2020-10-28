@@ -22,7 +22,7 @@ class Cache
         $this -> cacheFile = $cacheFile;
         $this -> checkCacheFile();
 
-        $this -> settings = $this -> getAll();
+        $this -> settings = $this -> all();
     }
 
     // -- Sets a value
@@ -51,6 +51,8 @@ class Cache
     // -- Gets all cached settings
     public function all()
     {
+        $this -> checkCacheFile();
+
         $settings = json_decode(file_get_contents($this -> cacheFile), true);
         $results = [];
 
