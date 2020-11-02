@@ -38,7 +38,7 @@ class Settings
         {
             $this -> user_id = $user -> id;
         }
-        elseif ( is_int($user) )
+        elseif ( is_numeric($user) )
         {
             $this -> user_id = $user;
         }
@@ -46,7 +46,7 @@ class Settings
             $user = \App\Models\User::whereUsername($user) -> first();
             if ( $user )
             {
-                $this -> user_id = $this -> id;
+                $this -> user_id = $user -> id;
             }
         }
 
@@ -66,9 +66,9 @@ class Settings
     }
 
     // -- Value getter
-    public function get($key, $default = null)
+    public function get($key, $default = null, $user_id = null)
     {
-        $value = $this -> fetch($key);
+        $value = $this -> fetch($key, $user_id);
 
         if( !is_null($value) )
         {
@@ -89,9 +89,9 @@ class Settings
     }
 
     // -- Get the setting value
-    private function fetch($key)
+    private function fetch($key, $user_id = null)
     {
-        $user_id = $this -> user_id;
+        $user_id = is_null($user_id) ? $this -> user_id : $user_id;
 
         if ($this -> cache -> has($key, $user_id)) {
             return $this -> cache -> get($key, null, $user_id);
@@ -140,10 +140,9 @@ class Settings
     }
 
     // -- Store value into registry
-    public function set($key, $value)
+    public function set($key, $value, $user_id = null)
     {
         $value = serialize($value);
-        $user_id = $this -> user_id;
 
         $setting = $this -> database -> table($this -> config['db_table'])
                         -> where( function($query) use ($user_id) {
@@ -161,7 +160,7 @@ class Settings
         if (is_null($setting)) {
             $this -> database -> table($this->config['db_table'])
                         -> insert([
-                            'user_id' => $this -> user_id,
+                            'user_id' => $user_id,
                             'setting' => $key,
                             'value' => $value,
                         ]);

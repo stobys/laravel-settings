@@ -47,7 +47,7 @@ class SettingSetCommand extends Command
             'user_id'   => $this->argument('user'),
         ];
 
-        settings() -> setUser($data['user_id']) -> set($data['setting'], $data['value']);
+        settings() -> set($data['setting'], $data['value'], $data['user_id']);
 
         $this -> table($headers, [$data]);
     }
