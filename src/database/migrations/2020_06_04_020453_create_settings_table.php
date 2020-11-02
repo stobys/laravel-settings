@@ -23,7 +23,7 @@ class CreateSettingsTable extends Migration {
             $table -> bigIncrements('id');
             $table -> bigInteger('user_id') -> nullable();
 
-            $table -> string('key', 100);
+            $table -> string('setting', 100);
             $table -> text('value') -> nullable();
             $table -> text('description') -> nullable();
 
@@ -31,7 +31,7 @@ class CreateSettingsTable extends Migration {
             $table -> dateTime('updated_at') -> nullable() -> useCurrent();
             $table -> dateTime('deleted_at') -> nullable();
 
-			$table -> unique(['user_id', 'key']);
+			$table -> unique(['setting', 'user_id']);
 
 		});
 	}

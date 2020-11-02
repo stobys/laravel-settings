@@ -40,14 +40,14 @@ class SettingSetCommand extends Command
      */
     public function handle()
     {
-        $headers = ['Key', 'Value', 'User ID'];
+        $headers = ['Setting', 'Value', 'User ID'];
         $data = [
-            'key'       => $this->argument('key'),
+            'setting'   => $this->argument('key'),
             'value'     => $this->argument('value'),
             'user_id'   => $this->argument('user'),
         ];
 
-        settings() -> setUser($data['user_id']) -> set($data['key'], $data['value']);
+        settings() -> setUser($data['user_id']) -> set($data['setting'], $data['value']);
 
         $this -> table($headers, [$data]);
     }

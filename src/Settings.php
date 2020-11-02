@@ -107,7 +107,7 @@ class Settings
                                     $query -> whereNull('user_id');
                                 }
                             })
-                        -> where('key', $key)
+                        -> where('setting', $key)
                         -> first(['value']);
 
         return (!is_null($row)) ? $this -> cache -> set($key, unserialize($row -> value), $user_id) : null;
@@ -133,7 +133,7 @@ class Settings
                                     $query -> whereNull('user_id');
                                 }
                             })
-                        -> where('key', $key)
+                        -> where('setting', $key)
                         -> count(['value']);
 
         return $count > 0;
@@ -155,14 +155,14 @@ class Settings
                                     $query -> whereNull('user_id');
                                 }
                             })
-                        -> where('key', $key)
+                        -> where('setting', $key)
                         -> first();
 
         if (is_null($setting)) {
             $this -> database -> table($this->config['db_table'])
                         -> insert([
                             'user_id' => $this -> user_id,
-                            'key' => $key,
+                            'setting' => $key,
                             'value' => $value,
                         ]);
         }
@@ -177,7 +177,7 @@ class Settings
                                         $query -> whereNull('user_id');
                                     }
                                 })
-                           -> where('key', $key)
+                           -> where('setting', $key)
                            -> update(['value' => $value]);
         }
 
@@ -202,7 +202,7 @@ class Settings
                             $query -> whereNull('user_id');
                         }
                     })
-                -> where('key', $key)
+                -> where('setting', $key)
                 -> delete();
 
         $this -> cache -> forget($key, $user_id);
