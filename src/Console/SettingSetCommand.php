@@ -40,14 +40,17 @@ class SettingSetCommand extends Command
      */
     public function handle()
     {
+        $key = config('db_field_key', 'setting_key');
+        $val = config('db_field_value', 'setting_value');
+
         $headers = ['Setting', 'Value', 'User ID'];
         $data = [
-            'setting'   => $this->argument('key'),
-            'value'     => $this->argument('value'),
+            $key   => $this->argument('key'),
+            $val     => $this->argument('value'),
             'user_id'   => $this->argument('user'),
         ];
 
-        settings() -> set($data['setting'], $data['value'], $data['user_id']);
+        settings() -> set($data[$key], $data[$val], $data['user_id']);
 
         $this -> table($headers, [$data]);
     }

@@ -16,7 +16,7 @@ class Setting extends Eloquent
      * @var array
      */
     protected $fillable = [
-        'user_id', 'setting', 'value'
+        'user_id', 'setting_key', 'setting_value'
     ];
 
     // -- the attributes that are not mass assignable.

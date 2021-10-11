@@ -18,39 +18,25 @@ class CreateSettingsTable extends Migration {
             throw new \Exception('Error: config/settings.php not found and defaults could not be merged. Please publish the package configuration before proceeding.');
         }
 
+        $key = config('db_field_key', 'setting_key');
+		$val = config('db_field_value', 'setting_value');
+
 		Schema::create($tableName, function(Blueprint $table)
 		{
             $table -> bigIncrements('id');
             $table -> bigInteger('user_id') -> nullable();
 
-            $table -> string('setting', 100);
-            $table -> text('value') -> nullable();
+            $table -> string($key, 100);
+            $table -> text($val) -> nullable();
             $table -> text('description') -> nullable();
 
             $table -> dateTime('created_at') -> nullable();
             $table -> dateTime('updated_at') -> nullable() -> useCurrent();
             $table -> dateTime('deleted_at') -> nullable();
 
-			$table -> unique(['setting', 'user_id']);
+			$table -> unique([$key, 'user_id']);
 
 		});
-	}
-
-
-	/**
-	 * Reverse the migrations.
-	 *
-	 * @return void
-	 */
-	public function down()
-	{
-		$tableName = config('settings.db_table');
-
-        if (empty($tableName)) {
-			throw new \Exception('Error: config/settings.php not found and defaults could not be merged. Please publish the package configuration before proceeding, or drop the table manually.');
-        }
-
-		Schema::drop($tableName);
 	}
 
 }

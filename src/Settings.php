@@ -24,12 +24,21 @@ class Settings
     // -- User ID
     protected $user_id;
 
+    // -- DB Fields
+    protected $fields = [
+        'key'   => 'setting_key',
+        'val'   => 'setting_val'
+    ];
+
     // -- Constructor
     public function __construct(DatabaseManager $database, Cache $cache, $config = array ())
     {
         $this -> database = $database;
         $this -> config   = $config;
         $this -> cache    = $cache;
+
+        $this -> fields['key'] = config('db_field_key', 'setting_key');
+        $this -> fields['val'] = config('db_field_value', 'setting_value');
     }
 
     public function setUser( $user )
@@ -107,8 +116,8 @@ class Settings
                                     $query -> whereNull('user_id');
                                 }
                             })
-                        -> where('setting', $key)
-                        -> first(['value']);
+                        -> where($this -> fields['key'], $key)
+                        -> first([$this -> fields['val']]);
 
         return (!is_null($row)) ? $this -> cache -> set($key, unserialize($row -> value), $user_id) : null;
     }
@@ -133,8 +142,8 @@ class Settings
                                     $query -> whereNull('user_id');
                                 }
                             })
-                        -> where('setting', $key)
-                        -> count(['value']);
+                        -> where($this -> fields['key'], $key)
+                        -> count([$this -> fields['val']]);
 
         return $count > 0;
     }
@@ -154,15 +163,15 @@ class Settings
                                     $query -> whereNull('user_id');
                                 }
                             })
-                        -> where('setting', $key)
+                        -> where($this -> fields['key'], $key)
                         -> first();
 
         if (is_null($setting)) {
             $this -> database -> table($this->config['db_table'])
                         -> insert([
                             'user_id' => $user_id,
-                            'setting' => $key,
-                            'value' => $value,
+                            $this -> fields['key'] => $key,
+                            $this -> fields['val'] => $value,
                         ]);
         }
         else {
@@ -176,8 +185,8 @@ class Settings
                                         $query -> whereNull('user_id');
                                     }
                                 })
-                           -> where('setting', $key)
-                           -> update(['value' => $value]);
+                           -> where($this -> fields['key'], $key)
+                           -> update([$this -> fields['val'] => $value]);
         }
 
         $this -> cache -> set($key, unserialize($value), $user_id);
@@ -201,7 +210,7 @@ class Settings
                             $query -> whereNull('user_id');
                         }
                     })
-                -> where('setting', $key)
+                -> where($this -> fields['key'], $key)
                 -> delete();
 
         $this -> cache -> forget($key, $user_id);
