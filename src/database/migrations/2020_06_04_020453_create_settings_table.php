@@ -2,8 +2,17 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Arr;
 
-class CreateSettingsTable extends Migration {
+return new class extends Migration
+{
+    protected $config = [];
+
+    public function __construct()
+    {
+        $this->config = config('settings', []);
+    }
 
 	/**
 	 * Run the migrations.
@@ -12,17 +21,17 @@ class CreateSettingsTable extends Migration {
 	 */
 	public function up()
 	{
-        $tableName = config('settings.db_table');
+        $tableName = Arr::get($this->config, 'db_table', 'settings');
 
         if (empty($tableName)) {
             throw new \Exception('Error: config/settings.php not found and defaults could not be merged. Please publish the package configuration before proceeding.');
         }
 
-        $key = config('db_field_key', 'setting_key');
-		$val = config('db_field_value', 'setting_value');
-
 		Schema::create($tableName, function(Blueprint $table)
 		{
+            $key = Arr::get($this->config, 'db_field_key', 'setting_key');
+            $val = Arr::get($this->config, 'db_field_value', 'setting_value');
+
             $table -> bigIncrements('id');
             $table -> bigInteger('user_id') -> nullable();
 
@@ -39,4 +48,20 @@ class CreateSettingsTable extends Migration {
 		});
 	}
 
-}
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        $tableName = Arr::get($this->config, 'db_table', 'settings');
+
+        if (empty($tableName)) {
+            throw new \Exception('Error: config/settings.php not found and defaults could not be merged. Please publish the package configuration before proceeding.');
+        }
+
+        Schema::dropIfExists($tableName);
+    }
+
+};
