@@ -2,6 +2,8 @@
 
 namespace SylveK\LaravelSettings;
 
+use Illuminate\Support\Arr;
+
 /**
  * Class Cache
  *
@@ -26,10 +28,10 @@ class Cache
     }
 
     // -- Sets a value
-    public function set($key, $value, $user_id = 0)
+    public function set($key, $value, $user_id = null)
     {
         $user_id = empty($user_id) ? 0 : $user_id;
-        array_set($this -> settings, $user_id .'.'. $key, $value);
+        Arr::set($this -> settings, $user_id .'.'. $key, $value);
 
         $this -> store();
 
@@ -39,13 +41,13 @@ class Cache
     // -- Gets a value
     public function get($key, $default = null, $user_id = 0)
     {
-        return array_get($this -> settings, $user_id .'.'. $key, $default);
+        return Arr::get($this -> settings, $user_id .'.'. $key, $default);
     }
 
     // -- Checks if $key is cached
     public function has($key, $user_id)
     {
-        return array_has($this -> settings, $user_id .'.'. $key);
+        return Arr::has($this -> settings, $user_id .'.'. $key);
     }
 
     // -- Gets all cached settings
@@ -58,7 +60,7 @@ class Cache
 
         foreach ($settings as $user_id => $values) {
             foreach ($values as $key => $value) {
-                array_set($results, $user_id .'.'. $key, unserialize($value));
+                Arr::set($results, $user_id .'.'. $key, unserialize($value));
             }
         }
 
@@ -78,7 +80,7 @@ class Cache
 
         foreach ($this -> settings as $user_id => $settings) {
             foreach ($settings as $key => $value) {
-                array_set($settings, $user_id .'.'. $key, unserialize($value));
+                Arr::set($settings, $user_id .'.'. $key, unserialize($value));
             }
         }
 
@@ -88,7 +90,7 @@ class Cache
     // -- Removes a value
     public function forget($key, $user_id = 0)
     {
-        array_forget($this -> settings, $user_id .'.'. $key);
+        Arr::forget($this -> settings, $user_id .'.'. $key);
 
         $this -> store();
     }
