@@ -1,4 +1,5 @@
 <?php
+
 return [
     // -- Cache Filename
     'cache_file' => storage_path('settings.json'),
