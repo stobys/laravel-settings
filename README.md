@@ -1,3 +1,6 @@
+[![Latest Stable Version](http://poser.pugx.org/stobys/laravel-settings/v?style=for-the-badge)](https://packagist.org/packages/stobys/laravel-settings)
+[![Total Downloads](https://poser.pugx.org/stobys/laravel-settings/downloads?style=for-the-badge)](https://packagist.org/packages/stobys/laravel-settings) 
+[![License](https://poser.pugx.org/stobys/laravel-settings/license?style=for-the-badge)](https://packagist.org/packages/stobys/laravel-settings)
 
 # Laravel-Settings
 Laravel Settings (Database + Cache) - basically clone of https://github.com/efriandika/laravel-settings
