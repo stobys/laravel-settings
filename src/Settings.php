@@ -146,7 +146,7 @@ class Settings
     }
 
     // -- Store value into registry
-    public function set($key, $value, $user_id = null)
+    public function set($key, $value, $user_id = 0)
     {
         $value = serialize($value);
 
