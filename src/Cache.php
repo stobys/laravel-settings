@@ -77,13 +77,13 @@ class Cache
     {
         $settings = [];
 
-        foreach ($this -> settings as $user_id => $settings) {
-            foreach ($settings as $key => $value) {
-                Arr::set($settings, $user_id .'.'. $key, unserialize($value));
+        foreach ($this->settings as $user_id => $setting) {
+            foreach ($setting as $key => $value) {
+                Arr::set($settings, $user_id . '.' . $key, serialize($value));
             }
         }
 
-        file_put_contents($this -> cacheFile, json_encode($settings));
+        file_put_contents($this->cacheFile, json_encode($settings));
     }
 
     // -- Removes a value
