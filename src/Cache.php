@@ -28,9 +28,8 @@ class Cache
     }
 
     // -- Sets a value
-    public function set($key, $value, $user_id = null)
+    public function set(string $key, $value, int $user_id = 0)
     {
-        $user_id = empty($user_id) ? 0 : $user_id;
         Arr::set($this -> settings, $user_id .'.'. $key, $value);
 
         $this -> store();
@@ -39,13 +38,13 @@ class Cache
     }
 
     // -- Gets a value
-    public function get($key, $default = null, $user_id = 0)
+    public function get(string $key, $default = null, int $user_id = 0)
     {
         return Arr::get($this -> settings, $user_id .'.'. $key, $default);
     }
 
     // -- Checks if $key is cached
-    public function has($key, $user_id)
+    public function has(string $key, int $user_id = 0)
     {
         return Arr::has($this -> settings, $user_id .'.'. $key);
     }
@@ -88,7 +87,7 @@ class Cache
     }
 
     // -- Removes a value
-    public function forget($key, $user_id = 0)
+    public function forget(string $key, int $user_id = 0)
     {
         Arr::forget($this -> settings, $user_id .'.'. $key);
 
