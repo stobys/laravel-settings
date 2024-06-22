@@ -5,6 +5,8 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Arr;
 
+use App\Models\User;
+
 return new class extends Migration
 {
     protected $config = [];
@@ -32,8 +34,8 @@ return new class extends Migration
             $key = Arr::get($this->config, 'db_field_key', 'setting_key');
             $val = Arr::get($this->config, 'db_field_value', 'setting_value');
 
-            $table -> bigIncrements('id');
-            $table -> bigInteger('user_id') -> nullable();
+            $table -> id();
+            $table -> foreignIdFor(User::class) -> nullable() -> constrained();
 
             $table -> string($key, 100);
             $table -> text($val) -> nullable();
