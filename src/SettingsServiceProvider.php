@@ -19,8 +19,8 @@ class SettingsServiceProvider extends ServiceProvider
             __DIR__ . '/config/settings.php' => config_path('settings.php')
         ]);
         $this->publishes([
-            __DIR__ . '/database/migrations/' => base_path('/database/migrations')
-        ]);
+            __DIR__ . '/migrations/2020_06_04_020453_create_settings_table.php' => database_path('migrations/' . date('Y_m_d_His') . '_create_settings_table.php')
+        ], 'migrations');
 
         if ($this->app->runningInConsole()) {
             $this->commands([
