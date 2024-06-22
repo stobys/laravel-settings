@@ -1,22 +1,25 @@
 {
     "name": "stobys/laravel-settings",
     "description": "Laravel Settings",
+    "homepage": "https://github.com/stobys/laravel-settings",
+    "license": "MIT",
     "keywords": [
         "laravel",
         "settings"
     ],
-    "homepage": "https://github.com/stobys/laravel-sortable",
-    "license": "MIT",
     "authors": [
         {
             "name": "Sławomir Tobys",
             "email": "s.tobys@gmail.com"
         }
     ],
+    "scripts": {
+      "test": "vendor/bin/phpunit",
+      "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+    },
     "require": {
-        "php": ">=7.2",
-        "illuminate/database": "*",
-        "laravel/helpers": "^1.2"
+        "php": ">=8.0",
+        "illuminate/support": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "4.6.*"
@@ -33,7 +36,10 @@
         "laravel": {
             "providers": [
                 "SylveK\\LaravelSettings\\SettingsServiceProvider"
-            ]
+            ],
+            "aliases": {
+                "Settings": "SylveK\\Facades\\Settings"
+            }
         }
     }
 }
