@@ -27,7 +27,7 @@ class Settings
     // -- DB Fields
     protected $fields = [
         'key'   => 'setting_key',
-        'val'   => 'setting_val'
+        'val'   => 'setting_value'
     ];
 
     // -- Constructor
@@ -37,8 +37,8 @@ class Settings
         $this -> config   = $config;
         $this -> cache    = $cache;
 
-        $this -> fields['key'] = config('db_field_key', 'setting_key');
-        $this -> fields['val'] = config('db_field_value', 'setting_value');
+        $this -> fields['key'] = config('settings.db_field_key', 'setting_key');
+        $this -> fields['val'] = config('settings.db_field_value', 'setting_value');
     }
 
     public function setUser( $user )
@@ -52,11 +52,8 @@ class Settings
             $this -> user_id = $user;
         }
         else {
-            $user = \App\Models\User::whereUsername($user) -> first();
-            if ( $user )
-            {
-                $this -> user_id = $user -> id;
-            }
+            $user = \App\Models\User::whereUsername($user) -> firstOrFail();
+            $this -> user_id = $user -> id;
         }
 
         return $this;

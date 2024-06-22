@@ -8,7 +8,7 @@ class Setting extends Eloquent
 {
 
     // -- the database table used by the model.
-    protected $table = 'generic';
+    protected $table = 'settings';
 
     /**
      * The attributes that are mass assignable.
@@ -20,16 +20,5 @@ class Setting extends Eloquent
     ];
 
     // -- the attributes that are not mass assignable.
-    // protected $guarded = ['id', 'created_at', 'updated_at', 'deleted_at'];
     protected $guarded = ['id'];
-
-    public function scopeFilter($query)
-    {
-        return $query;
-    }
-
-    public function scopeSort($query)
-    {
-        return $query;
-    }
 }

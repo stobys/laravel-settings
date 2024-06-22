@@ -40,8 +40,8 @@ class SettingSetCommand extends Command
      */
     public function handle()
     {
-        $key = config('db_field_key', 'setting_key');
-        $val = config('db_field_value', 'setting_value');
+        $key = config('settings.db_field_key', 'setting_key');
+        $val = config('settings.db_field_value', 'setting_value');
 
         $headers = ['Setting', 'Value', 'User ID'];
         $data = [
