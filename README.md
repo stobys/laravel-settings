@@ -19,20 +19,13 @@ or modify your `composer.json`:
 
 then run `composer update`:
 
-After updating composer, Register the ServiceProvider to the `providers` array in `config/app.php`
-
-    'SylveK\LaravelSettings\SettingsServiceProvider',
-
-Add an alias for the facade to `aliases` array in  your `config/app.php`
-
-    'Settings'  => SylveK\LaravelSettings\Facades\Settings::class,
+After updating composer, ServiceProvider and Facade class will be registered automatically, no need to register them manually.
 
 Publish the config and migration files now (Attention: This command will not work if you don't follow previous instruction):
 
     $ php artisan vendor:publish --provider="SylveK\LaravelSettings\SettingsServiceProvider" --force
 
-Change `config/settings.php` according to your needs. If you change `db_table`, don't forget to change the table's name
-in the migration file as well.
+Change `config/settings.php` according to your needs.
 
 Create the `settings` table.
 
