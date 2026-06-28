@@ -116,7 +116,7 @@ class Settings
                         -> where($this -> fields['key'], $key)
                         -> first([$this -> fields['val']]);
 
-        return (!is_null($row)) ? $this -> cache -> set($key, unserialize($row -> value), $user_id) : null;
+        return (!is_null($row)) ? $this -> cache -> set($key, unserialize($row->{$this->fields['val']}), $user_id) : null;
     }
 
 
@@ -150,47 +150,21 @@ class Settings
     {
         $value = serialize($value);
 
-        $setting = $this -> database -> table($this -> config['db_table'])
-                        -> where( function($query) use ($user_id) {
-                                if ( $user_id )
-                                {
-                                    $query -> where('user_id', $user_id);
-                                }
-                                else {
-                                    $query -> whereNull('user_id');
-                                }
-                            })
-                        -> where($this -> fields['key'], $key)
-                        -> first();
+        $setting = $this->database->table($this->config['db_table'])
+            -> upsert(
+                [
+                    'user_id' => $user_id,
+                    $this->fields['key'] => $key,
+                    $this->fields['val'] => $value,
+                ],
+                [$this->fields['key']],
+                [$this->fields['val']],
+            );
 
-        if (is_null($setting)) {
-            $this -> database -> table($this->config['db_table'])
-                        -> insert([
-                            'user_id' => $user_id,
-                            $this -> fields['key'] => $key,
-                            $this -> fields['val'] => $value,
-                        ]);
-        }
-        else {
-            $this -> database -> table($this->config['db_table'])
-                            -> where( function($query) use ($user_id) {
-                                    if ( $user_id )
-                                    {
-                                        $query -> where('user_id', $user_id);
-                                    }
-                                    else {
-                                        $query -> whereNull('user_id');
-                                    }
-                                })
-                           -> where($this -> fields['key'], $key)
-                           -> update([$this -> fields['val'] => $value]);
-        }
-
-        $this -> cache -> set($key, unserialize($value), $user_id);
+        $this->cache->set($key, unserialize($value), $user_id);
 
         return $value;
     }
-
 
     // -- Remove a setting
     public function forget($key)
