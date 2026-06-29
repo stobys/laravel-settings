@@ -1,9 +1,9 @@
 <?php
 
-namespace stobys\Settings\Console;
+namespace stobys\LaravelSettings\Console;
 
 use Illuminate\Console\Command;
-use stobys\Settings\Contracts\SettingsRepository;
+use stobys\LaravelSettings\Contracts\SettingsRepository;
 
 class SettingsClearCacheCommand extends Command
 {

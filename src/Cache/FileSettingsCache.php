@@ -1,8 +1,8 @@
 <?php
 
-namespace stobys\Settings\Cache;
+namespace stobys\LaravelSettings\Cache;
 
-use stobys\Settings\Exceptions\SettingsCacheException;
+use stobys\LaravelSettings\Exceptions\SettingsCacheException;
 
 /**
  * Prosty, opcache-friendly cache plikowy.

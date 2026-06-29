@@ -26,21 +26,21 @@
     },
     "autoload": {
         "psr-4": {
-            "stobys\\Settings\\": "src/"
+            "stobys\\LaravelSettings\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "stobys\\Settings\\Tests\\": "tests/"
+            "stobys\\LaravelSettings\\Tests\\": "tests/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "stobys\\Settings\\SettingsServiceProvider"
+                "stobys\\LaravelSettings\\SettingsServiceProvider"
             ],
             "aliases": {
-                "Settings": "stobys\\Settings\\Facades\\Settings"
+                "Settings": "stobys\\LaravelSettings\\Facades\\Settings"
             }
         }
     },

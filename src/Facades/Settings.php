@@ -1,6 +1,6 @@
 <?php
 
-namespace stobys\Settings\Facades;
+namespace stobys\LaravelSettings\Facades;
 
 use Illuminate\Support\Facades\Facade;
 use stobys\Settings\SettingsManager;
@@ -14,10 +14,10 @@ use stobys\Settings\SettingsManager;
  * @method static array  all()
  * @method static void   clearCache()
  * @method static void   setDefault(string $key, mixed $value)
- * @method static \stobys\Settings\SettingsManager for(int|string|null $userId)
- * @method static \stobys\Settings\SettingsManager forCurrentUser()
+ * @method static \stobys\LaravelSettings\SettingsManager for(int|string|null $userId)
+ * @method static \stobys\LaravelSettings\SettingsManager forCurrentUser()
  *
- * @see \stobys\Settings\SettingsManager
+ * @see \stobys\LaravelSettings\SettingsManager
  */
 class Settings extends Facade
 {

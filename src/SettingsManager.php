@@ -1,8 +1,8 @@
 <?php
 
-namespace stobys\Settings;
+namespace stobys\LaravelSettings;
 
-use stobys\Settings\Contracts\SettingsRepository;
+use stobys\LaravelSettings\Contracts\SettingsRepository;
 
 /**
  * Główny punkt wejścia do pakietu.

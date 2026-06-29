@@ -1,6 +1,6 @@
 <?php
 
-namespace stobys\Settings\Cache;
+namespace stobys\LaravelSettings\Cache;
 
 /**
  * Serializacja / deserializacja wartości PHP do/z stringa (kolumna `value` w bazie)

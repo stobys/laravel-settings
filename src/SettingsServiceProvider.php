@@ -1,10 +1,10 @@
 <?php
 
-namespace stobys\Settings;
+namespace stobys\LaravelSettings;
 
 use Illuminate\Support\ServiceProvider;
-use stobys\Settings\Cache\FileSettingsCache;
-use stobys\Settings\Contracts\SettingsRepository;
+use stobys\LaravelSettings\Cache\FileSettingsCache;
+use stobys\LaravelSettings\Contracts\SettingsRepository;
 
 class SettingsServiceProvider extends ServiceProvider
 {

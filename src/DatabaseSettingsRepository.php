@@ -1,11 +1,11 @@
 <?php
 
-namespace stobys\Settings;
+namespace stobys\LaravelSettings;
 
 use Illuminate\Support\Facades\DB;
-use stobys\Settings\Cache\FileSettingsCache;
-use stobys\Settings\Cache\ValueCaster;
-use stobys\Settings\Contracts\SettingsRepository;
+use stobys\LaravelSettings\Cache\FileSettingsCache;
+use stobys\LaravelSettings\Cache\ValueCaster;
+use stobys\LaravelSettings\Contracts\SettingsRepository;
 
 class DatabaseSettingsRepository implements SettingsRepository
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace stobys\Settings\Exceptions;
+namespace stobys\LaravelSettings\Exceptions;
 
 use RuntimeException;
 
