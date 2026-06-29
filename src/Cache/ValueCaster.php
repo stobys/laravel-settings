@@ -1,6 +1,6 @@
 <?php
 
-namespace YourVendor\Settings\Cache;
+namespace stobys\Settings\Cache;
 
 /**
  * Serializacja / deserializacja wartości PHP do/z stringa (kolumna `value` w bazie)

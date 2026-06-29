@@ -1,10 +1,10 @@
 <?php
 
-namespace YourVendor\Settings;
+namespace stobys\Settings;
 
 use Illuminate\Support\ServiceProvider;
-use YourVendor\Settings\Cache\FileSettingsCache;
-use YourVendor\Settings\Contracts\SettingsRepository;
+use stobys\Settings\Cache\FileSettingsCache;
+use stobys\Settings\Contracts\SettingsRepository;
 
 class SettingsServiceProvider extends ServiceProvider
 {

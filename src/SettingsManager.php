@@ -1,8 +1,8 @@
 <?php
 
-namespace YourVendor\Settings;
+namespace stobys\Settings;
 
-use YourVendor\Settings\Contracts\SettingsRepository;
+use stobys\Settings\Contracts\SettingsRepository;
 
 /**
  * Główny punkt wejścia do pakietu.

@@ -1,9 +1,9 @@
 <?php
 
-namespace YourVendor\Settings\Facades;
+namespace stobys\Settings\Facades;
 
 use Illuminate\Support\Facades\Facade;
-use YourVendor\Settings\SettingsManager;
+use stobys\Settings\SettingsManager;
 
 /**
  * @method static mixed  get(string $key, mixed $default = null)
@@ -14,10 +14,10 @@ use YourVendor\Settings\SettingsManager;
  * @method static array  all()
  * @method static void   clearCache()
  * @method static void   setDefault(string $key, mixed $value)
- * @method static \YourVendor\Settings\SettingsManager for(int|string|null $userId)
- * @method static \YourVendor\Settings\SettingsManager forCurrentUser()
+ * @method static \stobys\Settings\SettingsManager for(int|string|null $userId)
+ * @method static \stobys\Settings\SettingsManager forCurrentUser()
  *
- * @see \YourVendor\Settings\SettingsManager
+ * @see \stobys\Settings\SettingsManager
  */
 class Settings extends Facade
 {

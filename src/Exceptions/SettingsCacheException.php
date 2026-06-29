@@ -1,6 +1,6 @@
 <?php
 
-namespace YourVendor\Settings\Exceptions;
+namespace stobys\Settings\Exceptions;
 
 use RuntimeException;
 

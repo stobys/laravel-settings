@@ -1,11 +1,11 @@
 <?php
 
-namespace YourVendor\Settings;
+namespace stobys\Settings;
 
 use Illuminate\Support\Facades\DB;
-use YourVendor\Settings\Cache\FileSettingsCache;
-use YourVendor\Settings\Cache\ValueCaster;
-use YourVendor\Settings\Contracts\SettingsRepository;
+use stobys\Settings\Cache\FileSettingsCache;
+use stobys\Settings\Cache\ValueCaster;
+use stobys\Settings\Contracts\SettingsRepository;
 
 class DatabaseSettingsRepository implements SettingsRepository
 {

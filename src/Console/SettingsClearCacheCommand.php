@@ -1,9 +1,9 @@
 <?php
 
-namespace YourVendor\Settings\Console;
+namespace stobys\Settings\Console;
 
 use Illuminate\Console\Command;
-use YourVendor\Settings\Contracts\SettingsRepository;
+use stobys\Settings\Contracts\SettingsRepository;
 
 class SettingsClearCacheCommand extends Command
 {

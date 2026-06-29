@@ -1,6 +1,6 @@
 <?php
 
-namespace YourVendor\Settings\Contracts;
+namespace stobys\Settings\Contracts;
 
 interface SettingsRepository
 {

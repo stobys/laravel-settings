@@ -1,8 +1,8 @@
 <?php
 
-namespace YourVendor\Settings\Cache;
+namespace stobys\Settings\Cache;
 
-use YourVendor\Settings\Exceptions\SettingsCacheException;
+use stobys\Settings\Exceptions\SettingsCacheException;
 
 /**
  * Prosty, opcache-friendly cache plikowy.
