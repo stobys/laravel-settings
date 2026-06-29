@@ -5,7 +5,7 @@ Prosty pakiet do przechowywania ustawień key/value w bazie danych z obsługą *
 ## Instalacja
 
 ```bash
-composer require yourvendor/laravel-settings
+composer require stobys/laravel-settings
 ```
 
 Opublikuj config i migrację:
@@ -47,7 +47,7 @@ return [
 ### Facade
 
 ```php
-use YourVendor\Settings\Facades\Settings;
+use stobys\LaravelSettings\Facades\Settings;
 
 // --- Ustawienia globalne ---
 Settings::set('app.name', 'HeRMeS');
@@ -99,7 +99,7 @@ Settings::for(42)->forget('theme');
 ### Dependency Injection
 
 ```php
-use YourVendor\Settings\SettingsManager;
+use stobys\LaravelSettings\SettingsManager;
 
 class TrainingController extends Controller
 {
@@ -165,14 +165,14 @@ Settings::clearCache();
 
 Gdy `cast_types = true` (domyślnie), pakiet automatycznie serializuje i deserializuje typy PHP:
 
-| Typ PHP   | Przechowywany jako     | Przywracany jako |
-|-----------|------------------------|------------------|
-| `string`  | `"wartość"`           | `string`         |
-| `int`     | `"42"`                | `int`            |
-| `float`   | `"3.14"`              | `float`          |
-| `bool`    | `"1"` / `"0"`         | `bool`           |
-| `array`   | JSON                   | `array`          |
-| `null`    | `""`                   | `null`           |
+| Typ PHP  | Przechowywany jako | Przywracany jako |
+| -------- | ------------------ | ---------------- |
+| `string` | `"wartość"`        | `string`         |
+| `int`    | `"42"`             | `int`            |
+| `float`  | `"3.14"`           | `float`          |
+| `bool`   | `"1"` / `"0"`      | `bool`           |
+| `array`  | JSON               | `array`          |
+| `null`   | `""`               | `null`           |
 
 ---
 
