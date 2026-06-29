@@ -1,84 +1,202 @@
-[![Latest Stable Version](http://poser.pugx.org/stobys/laravel-settings/v?style=for-the-badge)](https://packagist.org/packages/stobys/laravel-settings)
-[![Total Downloads](https://poser.pugx.org/stobys/laravel-settings/downloads?style=for-the-badge)](https://packagist.org/packages/stobys/laravel-settings) 
-[![License](https://poser.pugx.org/stobys/laravel-settings/license?style=for-the-badge)](https://packagist.org/packages/stobys/laravel-settings)
+# laravel-settings
 
-# Laravel-Settings
-Laravel Settings (Database + Cache) - basically clone of https://github.com/efriandika/laravel-settings
+Prosty pakiet do przechowywania ustawień key/value w bazie danych z obsługą **per-user** i **opcache-friendly plikowym cache**.
 
+## Instalacja
 
-## How to Install
-Require this package with composer ([Packagist](https://packagist.org/packages/stobys/laravel-settings)) using the following command:
+```bash
+composer require yourvendor/laravel-settings
+```
 
-    composer require stobys/laravel-settings
+Opublikuj config i migrację:
 
-or modify your `composer.json`:
+```bash
+php artisan vendor:publish --tag=settings-config
+php artisan vendor:publish --tag=settings-migrations
+php artisan migrate
+```
 
-       "require": {
-          "stobys/laravel-settings": "1.*"
-       }
+---
 
-then run `composer update`:
+## Konfiguracja (`config/settings.php`)
 
-After updating composer, ServiceProvider and Facade class will be registered automatically, no need to register them manually.
+```php
+return [
+    'table'   => 'settings',           // nazwa tabeli w bazie
+    'columns' => [
+        'key'     => 'key',            // kolumna klucza
+        'value'   => 'value',          // kolumna wartości
+        'user_id' => 'user_id',        // kolumna user_id (null = globalne)
+    ],
 
-Publish the config and migration files now (Attention: This command will not work if you don't follow previous instruction):
+    // Czy pakiet ma przechowywać i przywracać oryginalny typ PHP?
+    'cast_types'  => true,
+    'columns_type' => 'type',          // kolumna przechowująca typ
 
-    $ php artisan vendor:publish --provider="SylveK\LaravelSettings\SettingsServiceProvider" --force
+    'cache' => [
+        'enabled' => true,
+        'path'    => storage_path('framework/settings.php'), // ścieżka pliku cache
+    ],
+];
+```
 
-Change `config/settings.php` according to your needs.
+---
 
-Create the `settings` table.
+## Użycie
 
-    $ php artisan migrate
+### Facade
 
+```php
+use YourVendor\Settings\Facades\Settings;
 
-## How to Use it?
+// --- Ustawienia globalne ---
+Settings::set('app.name', 'HeRMeS');
+Settings::set('maintenance', false);
+Settings::set('max_participants', 30);
+Settings::set('allowed_roles', ['admin', 'manager']);
 
-Set a value
+$name = Settings::get('app.name');           // 'HeRMeS'
+$flag = Settings::get('maintenance');        // false (bool, nie string '0')
+$max  = Settings::get('max_participants');   // 30 (int)
+$roles = Settings::get('allowed_roles');     // ['admin', 'manager'] (array)
 
-    Settings::set('key', 'value');
+Settings::has('app.name');       // true
+Settings::forget('app.name');
 
-Get a value
+// Wiele naraz
+Settings::setMany([
+    'theme'    => 'dark',
+    'language' => 'pl',
+]);
 
-    $value = Settings::get('key');
+// Ustaw domyślną wartość (tylko jeśli klucz nie istnieje)
+Settings::setDefault('theme', 'light');
 
-Get a value with Default Value.
+// Wszystkie globalne ustawienia
+$all = Settings::all(); // ['theme' => 'dark', 'language' => 'pl', ...]
+```
 
-    $value = Settings::get('key', 'Default Value');
+### Per-user
 
-> Note: If key is not found (null) in cache or settings table, it will return default value
+```php
+// Ustawienia dla konkretnego użytkownika
+Settings::for(42)->set('theme', 'light');
+Settings::for(42)->get('theme');             // 'light'
 
-Get a value via an helper
+// Fallback: jeśli user nie ma własnego ustawienia, zwraca globalne
+Settings::for(42)->get('language');          // zwróci globalne 'pl'
 
-    $value = settings('key');
-    $value = settings('key', 'default value');
+// Zalogowany użytkownik
+Settings::forCurrentUser()->set('notifications', true);
+$userSettings = Settings::forCurrentUser()->all();
+// ['theme' => 'light', 'language' => 'pl', 'notifications' => true]
+// ^-- globalne scalone z per-user; user nadpisuje globalne
 
-Forget a value
+// Usunięcie
+Settings::for(42)->forget('theme');
+```
 
-    Settings::forget('key');
+### Dependency Injection
 
-Forget all values
+```php
+use YourVendor\Settings\SettingsManager;
 
-    Settings::flush();
+class TrainingController extends Controller
+{
+    public function __construct(private SettingsManager $settings) {}
 
-## Fallback to Laravel Config
+    public function index()
+    {
+        $maxParticipants = $this->settings->get('training.max_participants', 20);
+        $userTheme = $this->settings->for(auth()->id())->get('theme', 'light');
+    }
+}
+```
 
-How to activate?
+---
 
-    // Change your config/settings.php
-    'fallback'   => true
+## Cache plikowy
 
-Example
+### Jak działa
 
-    /*
-     * If the value with key => mail.host is not found in cache or DB of Larave Settings
-     * it will return same value as config::get('mail.host');
-     */
-    Settings::get('mail.host');
+Ustawienia są buforowane w pliku PHP (`storage/framework/settings.php`):
 
-> Note: It will work if default value in laravel setting is not set
+```php
+<?php
+// Auto-generated by laravel-settings. DO NOT EDIT.
+// Generated at: 2024-01-15 10:30:00
 
-### License
+return [
+    'global' => [
+        'app.name' => 'HeRMeS',
+        'theme'    => 'dark',
+    ],
+    'users' => [
+        42 => ['theme' => 'light'],
+        7  => ['language' => 'en'],
+    ],
+];
+```
 
-The Laravel Settings is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+- Plik jest ładowany przez `include` – PHP kompiluje go i **opcache** trzyma w pamięci → zero zapytań do bazy przy każdym `get()`.
+- Przy każdym `set()` / `forget()` – plik jest **atomowo** nadpisywany (write do `.tmp` → `rename`).
+- Przy pierwszym odczycie, jeśli plik nie istnieje, następuje **automatyczny rebuild** z bazy.
 
+### Zarządzanie cache
+
+```bash
+# Wyczyść cache (wymusi reload z bazy przy następnym odczycie)
+php artisan settings:clear-cache
+
+# Wyczyść i od razu przebuduj z bazy
+php artisan settings:clear-cache --rebuild
+```
+
+```php
+// Z kodu
+Settings::clearCache();
+```
+
+> **Ważne przy deploymencie:** Dodaj `php artisan settings:clear-cache` do swojego pipeline'u (obok `php artisan config:clear`), aby po deploymencie cache nie zawierał starych wartości.
+
+---
+
+## Typy wartości
+
+Gdy `cast_types = true` (domyślnie), pakiet automatycznie serializuje i deserializuje typy PHP:
+
+| Typ PHP   | Przechowywany jako     | Przywracany jako |
+|-----------|------------------------|------------------|
+| `string`  | `"wartość"`           | `string`         |
+| `int`     | `"42"`                | `int`            |
+| `float`   | `"3.14"`              | `float`          |
+| `bool`    | `"1"` / `"0"`         | `bool`           |
+| `array`   | JSON                   | `array`          |
+| `null`    | `""`                   | `null`           |
+
+---
+
+## Struktura tabeli
+
+```sql
+CREATE TABLE settings (
+    id         BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    `key`      VARCHAR(255) NOT NULL,
+    `value`    TEXT,
+    `type`     VARCHAR(10) DEFAULT 'string',
+    user_id    BIGINT UNSIGNED NULL,
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL,
+    UNIQUE KEY settings_key_user_id_unique (`key`, user_id),
+    INDEX settings_user_id_index (user_id)
+);
+```
+
+---
+
+## Artisan
+
+```bash
+php artisan settings:clear-cache           # Wyczyść cache
+php artisan settings:clear-cache --rebuild # Wyczyść i przebuduj z DB
+```

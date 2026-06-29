@@ -1,54 +1,62 @@
 <?php
 
-namespace SylveK\LaravelSettings;
+namespace YourVendor\Settings;
 
 use Illuminate\Support\ServiceProvider;
-
-use SylveK\LaravelSettings\Console\SettingGetCommand;
-use SylveK\LaravelSettings\Console\SettingSetCommand;
+use YourVendor\Settings\Cache\FileSettingsCache;
+use YourVendor\Settings\Contracts\SettingsRepository;
 
 class SettingsServiceProvider extends ServiceProvider
 {
-    // -- Indicates if loading of the provider is deferred.
-    protected $defer = false;
-
-    // -- Bootstrap the application events.
-    public function boot()
+    public function register(): void
     {
-        $this->publishes([
-            __DIR__ . '/config/settings.php' => config_path('settings.php')
-        ]);
-        $this->publishes([
-            __DIR__ . '/migrations/2020_06_04_020453_create_settings_table.php' => database_path('migrations/' . date('Y_m_d_His') . '_create_settings_table.php')
-        ], 'migrations');
+        $this->mergeConfigFrom(
+            __DIR__ . '/../config/settings.php',
+            'settings'
+        );
 
-        if ($this->app->runningInConsole()) {
-            $this->commands([
-                SettingGetCommand::class,
-                SettingSetCommand::class,
-            ]);
-        }
-    }
-
-    // -- Register the service provider.
-    public function register()
-    {
-        $this -> mergeConfigFrom(__DIR__ .'/config/settings.php', 'settings');
-
-        $this->app->singleton('settings', function ($app) {
-            $config = $app->config->get('settings', [
-                'cache_file' => storage_path('settings.json'),
-                'db_table'   => 'settings'
-            ]);
-
-            return new Settings($app['db'], new Cache($config['cache_file']), $config);
+        // FileSettingsCache – singleton (jeden plik, jeden stan w ramach requesta)
+        $this->app->singleton(FileSettingsCache::class, function ($app) {
+            $path = $app['config']->get('settings.cache.path');
+            return new FileSettingsCache($path);
         });
 
+        // Repository – singleton
+        $this->app->singleton(SettingsRepository::class, function ($app) {
+            return new DatabaseSettingsRepository(
+                $app->make(FileSettingsCache::class),
+                $app['config']->get('settings')
+            );
+        });
+
+        // Manager – singleton (kontekst per-user jest immutable clone, więc singleton jest bezpieczny)
+        $this->app->singleton(SettingsManager::class, function ($app) {
+            return new SettingsManager(
+                $app->make(SettingsRepository::class)
+            );
+        });
     }
 
-    // -- Get the services provided by the provider.
-    public function provides()
+    public function boot(): void
     {
-        return array ('settings');
+        if ($this->app->runningInConsole()) {
+            // Publikuj config
+            $this->publishes([
+                __DIR__ . '/../config/settings.php' => config_path('settings.php'),
+            ], 'settings-config');
+
+            // Publikuj migrację
+            $this->publishes([
+                __DIR__ . '/../database/migrations/' => database_path('migrations'),
+            ], 'settings-migrations');
+
+            // Rejestruj komendę Artisan
+            $this->commands([
+                Console\SettingsClearCacheCommand::class,
+            ]);
+        }
+
+        // Ładuj migrację automatycznie (jeśli nie opublikowano)
+        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
     }
 }
