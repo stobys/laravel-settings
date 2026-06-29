@@ -3,7 +3,7 @@
 namespace stobys\LaravelSettings\Facades;
 
 use Illuminate\Support\Facades\Facade;
-use stobys\Settings\SettingsManager;
+use stobys\LaravelSettings\SettingsManager;
 
 /**
  * @method static mixed  get(string $key, mixed $default = null)
