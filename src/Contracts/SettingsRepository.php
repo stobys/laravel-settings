@@ -1,6 +1,6 @@
 <?php
 
-namespace stobys\Settings\Contracts;
+namespace stobys\LaravelSettings\Contracts;
 
 interface SettingsRepository
 {
